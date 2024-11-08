@@ -1,0 +1,7 @@
+name: okx_repository
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+
+dev_dependencies:
+  lints: any
