@@ -14,61 +14,84 @@ late int lazy = () {
 }();
 
 void main() async {
-  print('main start');
-  test2();
-  print('==================');
-  time = 5;
-  test2();
-  print('main end');
+  print('===== standard usage =====');
+  await _stdUsage(null);
+  await _stdUsage('okx');
+  print('===== int usage =====');
+  _intUsage(3);
+  print('===== iterable usage =====');
+  _iterableUsage();
+  print('===== bool usage =====');
+  _boolUsage();
+}
 
-  App().test((o) => false);
-  Standard(App()).test((x) => false);
+Future<void> _stdUsage(String? str) async {
+  // let
+  int length = str.let((s) {
+    if (s == null || s.isEmpty) {
+      return 0;
+    }
+    return s.length;
+  });
+  print(length);
 
-  print('lazy ${lazy}');
-  print('lazy2 ${lazy}');
-
-  bool b = time.takeUnless((t) => t == null || t < 0).isNull();
+  // async
+  bool b = await str.let((s) async {
+    await Future.delayed(Duration(seconds: 1));
+    return s == null || s.isEmpty;
+  });
   print(b);
+
+  // apply
+  str?.apply((s) {
+    print(s);
+  });
+
+  // test
+  if (str.test((s) => s != null && s.isNotEmpty)) {
+    print('Not Empty');
+  }
+
+  // takeIf
+  String s1 = str.takeIf((s) => s != null && s.isNotEmpty) ?? 'default';
+  print(s1);
+
+  // takeUnless
+  String s2 = str.takeIf((s) => s == null || s.isEmpty) ?? 'default';
+  print(s2);
+
+  // isNull
+  print(str.isNull());
 }
 
-void test2() async {
-  time = time?.let<int?>((t) {
-    print('test2 let: $time');
-    return t - 1;
-  })?.apply((t) async {
-    print('test2 apply ${t} t = ${t.isEven}');
-    print('test2 apply: ${time}');
+void _intUsage(int i) {
+  i.repeat((index) {
+    print(index);
   });
-
-  print('test2: $time');
 }
 
-void test1() async {
-  channel = await list.first.let((s) async {
-    print('apply 1');
-    print('delayed before: $channel');
-    await Future.delayed(Duration(seconds: 1));
-    print('delayed: $channel');
-    return s;
-  });
+void _iterableUsage() {
+  List<String> list = ['1', null, '2', 'abc', 'def'].mapNotNull((e) {
+    return e == null || e.length == 1 ? null : e;
+  }).toList();
+  // [abc, def]
+  print(list);
 
-  print(channel.test((s) {
-    return s.isNotEmpty;
-  }));
+  bool all = ['a', 'b', 'c'].all((e) => e.length == 1);
+  // true
+  print(all);
+  // true
+  print([].all((e) => e == null, onEmpty: true));
+  // false
+  print([].all((e) => e == null, onEmpty: false));
 
-  channel.let((s) async {
-    return s.test((s) {
-      return s.isNotEmpty;
-    });
-  });
-
-  bool empty = await channel.let((s) async {
-    await Future.delayed(Duration(seconds: 1));
-    return s.isEmpty;
-  });
-  print(empty);
+  int count = ['abc', '123', 'a1'].count((e) => e.length == 3);
+  // 2
+  print(count);
 }
 
-class App {
-  bool test(bool Function(Object) predicate) => predicate(this);
+void _boolUsage() {
+  print(true.or(false));
+  print(true.and(false));
+  print(true.not());
 }

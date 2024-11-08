@@ -1,10 +1,11 @@
 extension IterableExt<T> on Iterable<T> {
-
   Iterable<R> mapNotNull<R>(R? Function(T element) transform) {
     return map(transform).whereType();
   }
 
-  bool all(bool Function(T element) predicate) {
+  bool all(bool Function(T element) predicate, {bool onEmpty = false}) {
+    if (this.isEmpty) return onEmpty;
+
     for (T element in this) {
       if (!predicate(element)) return false;
     }

@@ -1,7 +1,7 @@
 name: okx
 description: Dart Enhancements. A Suite of Handy Static Extension Methods.
-homepage: https://github.com/Lochinor/awesome-dart/packages/extension
-version: 0.0.1
+homepage: https://github.com/Lochinor/awesome-dart/tree/main/packages/extension
+version: 0.0.2
 environment:
   sdk: ">=2.17.0 <4.0.0"
 
