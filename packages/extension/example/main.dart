@@ -22,7 +22,10 @@ void main() async {
   print('===== iterable usage =====');
   _iterableUsage();
   print('===== bool usage =====');
-  _boolUsage();
+  _boolUsage(true, true);
+  _boolUsage(true, false);
+  _boolUsage(false, false);
+  _boolUsage(false, true);
 }
 
 Future<void> _stdUsage(String? str) async {
@@ -90,8 +93,8 @@ void _iterableUsage() {
   print(count);
 }
 
-void _boolUsage() {
-  print(true.or(false));
-  print(true.and(false));
-  print(true.not());
+void _boolUsage(bool a, bool b) {
+  print("$a or $b: ${a.or(b)}");
+  print("$a and $b: ${a.and(b)}");
+  print("$a not: ${a.not()}");
 }
